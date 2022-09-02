@@ -414,8 +414,7 @@ significance_histogram(true, false)
 # investigating spike distribution and number of trials removed
 bucket_count_neuronlist(neuronlist,ALL_SITUATIONS,11000,-3000,8000)
 mean_spikes, std_spikes,spikelist = mean_and_std_spikes()
-48.7 - (10 * 4.33)
-spikelist
+
 histogram(spikelist)
 total_removed = 0
 for n in spikelist
