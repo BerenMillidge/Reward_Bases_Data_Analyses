@@ -1,4 +1,4 @@
-# plotting functions for Fig1
+# plotting functions used in the neural data analysis for the reward basis paper
 using MAT
 using Plots
 using GLM
@@ -34,17 +34,6 @@ TICKFONTSIZE=10
 LEGENDFONTSIZE=10
 TITLEFONTSIZE=15
 
-function mean_and_std_spikes()
-    spikelist = []
-    for neuron in neuronlist
-        spiketimes,  bits, situations, fp_times, stim_onsets, solenoid_1s, solenoid_2s, duration = parse_data_dict("Data/w065-0$neuron" * ".mat")
-        for s in spiketimes
-            push!(spikelist, length(s))
-        end
-    end
-    return mean(spikelist), std(spikelist) / sqrt(length(neuronlist)), spikelist
-end
-
 function plot_average_spikecourse()
     bucket_start = -2500
     bucket_end = 8000
@@ -57,6 +46,7 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
     bucket_start = -500
     bucket_end = 1500
     window_size=window_size
+    ws = window_size /2
     xs = collect(bucket_start:50:bucket_end-100)
     juice_means, juice_stds = count_plot_by_neuron(juice_neuron,bucket_start, bucket_end, window_size,true,true)
     food_means, food_stds = count_plot_by_neuron(food_neuron, bucket_start, bucket_end, window_size,true,true)
@@ -66,11 +56,11 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         juice_means = juice_means ./ window_size_seconds
         food_means = food_means ./ window_size_seconds
     end
-    plot(xs,juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
-    plot!(xs,juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs,juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs,juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs,juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
+    plot(xs .+ ws,juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
+    plot!(xs .+ ws,juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
+    plot!(xs .+ ws,juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
+    plot!(xs .+ ws,juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
+    plot!(xs .+ ws,juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
     xlabel!("Time (ms) after cue")
     if use_frequency_labels
@@ -79,13 +69,13 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         ylabel!("Spikes within window")
     end
     title!("Juice responsive neuron")
-    savefig("figures/juice_neuron_all_conditions_overlapping_window_2.png")
+    savefig("figures/juice_neuron_all_conditions_overlapping_window_3.png")
 
-    plot(xs,food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
-    plot!(xs,food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs,food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs,food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs,food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
+    plot(xs .+ ws,food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
+    plot!(xs .+ ws,food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
+    plot!(xs .+ ws,food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
+    plot!(xs .+ws,food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
+    plot!(xs .+ ws,food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
     xlabel!("Time (ms) after cue")
     if use_frequency_labels
@@ -93,8 +83,8 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
     else
         ylabel!("Spikes within window")
     end
-    title!("Food responsive neuron")
-    savefig("figures/food_neuron_all_conditions_overlapping_window_plot_2.png")
+    title!("Banana responsive neuron")
+    savefig("figures/food_neuron_all_conditions_overlapping_window_plot_3.png")
 
     plot(xs,standard_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
     plot!(xs,standard_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
@@ -109,7 +99,7 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         ylabel!("Spikes within window")
     end
     title!("Value responsive neuron")
-    savefig("figures/value_only_neuron_all_conditions_overlapping_window_plot_2.png")
+    savefig("figures/value_only_neuron_all_conditions_overlapping_window_plot_3.png")
 end
 
 function timecourse_plots_non_overlapping()
@@ -120,38 +110,38 @@ function timecourse_plots_non_overlapping()
     juice_means, juice_stds = count_plot_by_neuron(juice_neuron,bucket_start, bucket_end, window_size,true)
     food_means, food_stds = count_plot_by_neuron(food_neuron, bucket_start, bucket_end, window_size,true)
     standard_means, standard_stds = count_plot_by_neuron(standard_neuron, bucket_start, bucket_end, window_size,true)
-    plot(xs[2:end-1],juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
-    plot!(xs[2:end-1],juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs[2:end-1],juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs[2:end-1],juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs[2:end-1],juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
+    plot(xs[2:end-1] .+ window_size ,juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
+    plot!(xs[2:end-1] .+ window_size ,juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
+    plot!(xs[2:end-1] .+ window_size ,juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
+    plot!(xs[2:end-1] .+window_size ,juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
+    plot!(xs[2:end-1] .+ window_size ,juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
     xlabel!("Time (ms) after cue")
     ylabel!("Spikes within window")
     title!("Juice Responsive Neuron")
-    savefig("figuresjuice_neuron_all_conditions_window_plot_3.png")
+    savefig("figures/juice_neuron_all_conditions_window_plot_3.png")
 
-    plot(xs[2:end-1],food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
-    plot!(xs[2:end-1],food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs[2:end-1],food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs[2:end-1],food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs[2:end-1],food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
+    plot(xs[2:end-1] .+ window_size, food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
+    plot!(xs[2:end-1] .+ window_size, food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
+    plot!(xs[2:end-1] .+ window_size, food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
+    plot!(xs[2:end-1] .+ window_size,food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
+    plot!(xs[2:end-1] .+ window_size,food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
     xlabel!("Time (ms) after cue")
     ylabel!("Spikes within window")
     title!("Food Responsive Neuron")
-    savefig("figuresfood_neuron_all_conditions_window_plot_3.png")
+    savefig("figures/food_neuron_all_conditions_window_plot_3.png")
 
-    plot(xs[2:end-1],standard_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
-    plot!(xs[2:end-1],standard_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs[2:end-1],standard_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs[2:end-1],standard_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs[2:end-1],standard_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
+    plot(xs[2:end-1] .+ window_size,standard_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE, legendfontsize=LEGENDFONTSIZE)
+    plot!(xs[2:end-1] .+ window_size,standard_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
+    plot!(xs[2:end-1] .+ window_size,standard_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
+    plot!(xs[2:end-1] .+ window_size,standard_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
+    plot!(xs[2:end-1] .+ window_size,standard_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
     xlabel!("Time (ms) after cue")
     ylabel!("Spikes within window")
     title!("Spikes of Value Responsive Neuron")
-    savefig("figuresvalue_only_neuron_all_conditions_window_plot_2.png")
+    savefig("figures/value_only_neuron_all_conditions_window_plot_2.png")
 end
 
 function run_lms()
@@ -191,6 +181,12 @@ function all_neurons_condition_histogram(window_start = 100, window_end = 400,re
     else
         divisor = 1
     end
+
+    # right let's be super annoying re rafal and actually try to set up separate histograms
+    # argh he's so irritating. this plot size thing is driving me insane and making me procrastinate massively
+    # which really sucks as I have SO SO SO MUCH TO DO FUCK
+    # really not enjoying this at all UGH. And SO BAD TODAY have done NOTHING since this morning which fuck
+    # fucking rafal
     spiketimes,  bits, situations, fp_times, stim_onsets, solenoid_1s, solenoid_2s, duration = parse_data_dict("Data/w065-0359" *".mat")
     situation_1 = counts_per_trial_window_by_situation(spiketimes, stim_onsets,situations, [1],window_start,window_end,false) / divisor
     situation_2 = counts_per_trial_window_by_situation(spiketimes, stim_onsets, situations, [2], window_start,window_end,false) / divisor
@@ -205,6 +201,7 @@ function all_neurons_condition_histogram(window_start = 100, window_end = 400,re
     situation_2_4 = counts_per_trial_window_by_situation(spiketimes, stim_onsets, situations, [4],window_start,window_end,false) / divisor
     situation_2_5 = counts_per_trial_window_by_situation(spiketimes, stim_onsets, situations, [5],window_start,window_end,false) / divisor
     if plot_frequency
+        # this assumes a window size of 300 and is fragile to that
         xs = collect(0:3:30)
     else
         xs = collect(0:1:10)
@@ -287,7 +284,7 @@ function relative_spikes_scatterplot_old(plot_firing_rate=false)
     return corr_coeff, p_val
 end
 
-function relative_spikes_scatterplot(normalized_counts = true, use_all_situations = false, use_best_fit_line = true,plot_firing_rate=false)
+function relative_spikes_scatterplot(normalized_counts = true, use_all_situations = false, use_best_fit_line = true,plot_firing_rate=false,plot_best_fit_line = false)
     window_start = 100
     window_end = 400
     window_size = window_end - window_start
@@ -341,7 +338,9 @@ function relative_spikes_scatterplot(normalized_counts = true, use_all_situation
         println("cor coeff: $corr_coeff")
         println("pval: $p_val")
         intercept =1.0
-        plot!(xs, (corr_coeff .* xs) .+ intercept,label="Best fit line",color=:red,legend=:topleft)
+        if plot_best_fit_line
+            plot!(xs, (corr_coeff .* xs) .+ intercept,label="Best fit line",color=:red,legend=:topleft)
+        end
     end
     if plot_firing_rate
         xlabel!("Relative firing rate juice (0.9ml)")
@@ -410,11 +409,47 @@ plot_overlapping_window_timecourses(200,true)
 all_neurons_condition_histogram(100,400,true,true,true)
 significance_histogram(true, false)
 
-
-# investigating spike distribution and number of trials removed
+# let's count total number of spikes across trials
 bucket_count_neuronlist(neuronlist,ALL_SITUATIONS,11000,-3000,8000)
-mean_spikes, std_spikes,spikelist = mean_and_std_spikes()
 
+
+### regenerate regression coeffs
+coeff_list, ts_list, ps_list = reward_type_only_subjective_value_coeffs(neuronlist, ALL_SITUATIONS,100,400,false, true)
+npzwrite("data/reward_type_only_subjective_value_coeff_list_normalized.npy", coeff_list)
+npzwrite("data/reward_type_only_subjective_value_ts_list_normalized.npy", ts_list)
+npzwrite("data/reward_type_only_subjective_value_ps_list_normalized.npy", ps_list)
+
+coeff_list, ts_list, ps_list = reward_type_only_coeffs(neuronlist, ALL_SITUATIONS,100,400,false, true)
+npzwrite("data/reward_type_only_coeff_list_normalized.npy", coeff_list)
+npzwrite("data/reward_type_only_ts_list_normalized.npy", ts_list)
+npzwrite("data/reward_type_only_ps_list_normalized.npy", ps_list)
+
+coeff_list, ts_list, ps_list = subjective_value_bipolar_reward(neuronlist, ALL_SITUATIONS,100,400,false, true)
+npzwrite("data/banana_juice_bipolar_coeff_list_normalized.npy", coeff_list)
+npzwrite("data/banana_juice_bipolar_ts_list_normalized.npy", ts_list)
+npzwrite("data/banana_juice_bipolar_ps_list_normalized.npy", ps_list)
+
+coeff_list, ts_list, ps_list= subjective_value_reward_type_coeffs(neuronlist, ALL_SITUATIONS, 100,400, false, true)
+npzwrite("data/banana_juice_reward_type_coeff_list_normalized.npy", coeff_list)
+npzwrite("data/banana_juice_reward_type_ts_list_normalized.npy", ts_list)
+npzwrite("data/banana_juice_reward_type_ps_list_normalized.npy", ps_list)
+
+
+
+
+function mean_and_std_spikes()
+    spikelist = []
+    for neuron in neuronlist
+        spiketimes,  bits, situations, fp_times, stim_onsets, solenoid_1s, solenoid_2s, duration = parse_data_dict("Data/w065-0$neuron" * ".mat")
+        for s in spiketimes
+            push!(spikelist, length(s))
+        end
+    end
+    return mean(spikelist), std(spikelist) / sqrt(length(neuronlist)), spikelist
+end
+mean_spikes, std_spikes,spikelist = mean_and_std_spikes()
+48.7 - (10 * 4.33)
+spikelist
 histogram(spikelist)
 total_removed = 0
 for n in spikelist
@@ -423,3 +458,44 @@ for n in spikelist
     end
 end
 total_removed
+length(spikelist)
+
+spiketimes, bits,situations, fp_times, stim_onsets, solenoid_1s,solenoid_2s,duration = parse_data_dict()
+spiketimes[67]
+
+counts_juice, counts_banana = neuron_means_std_spikes_in_window_by_situation(neuronlist,[JUICE_SITUATIONS, BANANA_SITUATIONS],100,400,false, true)
+counts_juice_means, counts_juice_stds = counts_juice
+counts_banana_means, counts_banana_stds = counts_banana
+counts_juice_means[1]
+counts_banana_means[1]
+counts_juice_means[10]
+counts_banana_means[10]
+maximum(counts_banana_means)
+findmax(counts_banana_means)
+neuronlist
+# juice neuron is 1
+# food neuron is 10
+println(neuronlist)
+neuronlist[12]
+neuronlist[10]
+# testing
+spiketimes,  bits, situations, fp_times, stim_onsets, solenoid_1s, solenoid_2s, duration = parse_data_dict("Data/w065-0359" *".mat")
+count_list_juice_neuron_juice = counts_per_trial_window_by_situation(spiketimes, stim_onsets,situations, JUICE_SITUATIONS,100,400,false)
+juice_means, juice_stds = count_plot_by_neuron([359],-500, 1500, 200,true)
+
+
+
+counts = bucket_counts_by_situation(spiketimes, stim_onsets, situations, JUICE_SITUATIONS,300,100,400)
+JUICE_SITUATIONS
+all_bucket_counts =bucket_count_by_situation_neuronlist([359],ALL_SITUATIONS,100, -500, 1500,true)
+counts_matrix = hcat(vcat.(all_bucket_counts[1]...)...)
+mean(counts_matrix,dims=1)
+
+collect(1:3:30)
+
+
+all_bucket_counts[1]
+
+
+spikes_filt, events_filt = filter_spikes_events_by_situation(spiketimes,stim_onsets, situations, JUICE_SITUATIONS)
+relative_spikes_filt = get_relative_times(spikes_filt, events_filt)
