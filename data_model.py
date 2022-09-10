@@ -115,21 +115,22 @@ def run_simulation(N_runs = 200, lr = 0.1, N_seeds = 10, regression_type = "rewa
     print(xs.shape)
     print(mean_food.shape)
     print(std_food.shape)
-    plt.plot(xs, mean_food[:,0], label="Banana 1.5g", color="orange", linestyle="solid")
+    LINEWIDTH = 2
+    plt.plot(xs, mean_food[:,0], label="Banana 1.5g", color="orange", linestyle="solid", linewidth = LINEWIDTH)
     plt.fill_between(xs, mean_food[:,0] - std_food[:,0], mean_food[:,0] + std_food[:,0], color="orange", alpha=0.5)
-    plt.hlines(rs_food[0],xmin=0, xmax=N_runs, color="orange", linestyle="dashed", alpha=0.5)
-    plt.plot(xs, mean_food[:,1], label="Banana 0.3g", color="orange", linestyle="dashed")
+    plt.hlines(rs_food[0],xmin=0, xmax=N_runs, color="orange", linestyle="dashed", alpha=0.5, linewidth = LINEWIDTH)
+    plt.plot(xs, mean_food[:,1], label="Banana 0.3g", color="orange", linestyle="dashed", linewidth = LINEWIDTH)
     plt.fill_between(xs, mean_food[:,1] - std_food[:,1], mean_food[:,1] + std_food[:,1], color="orange", alpha=0.3)
-    plt.hlines(rs_food[1],xmin=0, xmax=N_runs, color="orange", linestyle="dashed", alpha=0.5)
-    plt.plot(xs, mean_water[:,4], label="Juice 0.9ml", color="blue", linestyle="solid")
+    plt.hlines(rs_food[1],xmin=0, xmax=N_runs, color="orange", linestyle="dashed", alpha=0.5, linewidth = LINEWIDTH)
+    plt.plot(xs, mean_water[:,4], label="Juice 0.9ml", color="blue", linestyle="solid", linewidth = LINEWIDTH)
     plt.fill_between(xs, mean_water[:,4] - std_water[:,4], mean_water[:,4] + std_water[:,4], color="blue", alpha=0.5)
-    plt.hlines(rs_water[4],xmin=0, xmax=N_runs, color="blue", linestyle="dashed", alpha=0.5)
-    plt.plot(xs, mean_water[:,3], label="Juice 0.5ml", color="blue", linestyle="dashed")
+    plt.hlines(rs_water[4],xmin=0, xmax=N_runs, color="blue", linestyle="dashed", alpha=0.5, linewidth = LINEWIDTH)
+    plt.plot(xs, mean_water[:,3], label="Juice 0.5ml", color="blue", linestyle="dashed", linewidth = LINEWIDTH)
     plt.fill_between(xs, mean_water[:,3] - std_water[:,3], mean_water[:,3] + std_water[:,3], color="blue", alpha=0.3)
-    plt.hlines(rs_water[3],xmin=0, xmax=N_runs, color="blue", linestyle="dashed", alpha=0.5)
-    plt.plot(xs, mean_water[:,2], label="Juice 0.2ml", color="blue", linestyle="dotted")
+    plt.hlines(rs_water[3],xmin=0, xmax=N_runs, color="blue", linestyle="dashed", alpha=0.5, linewidth = LINEWIDTH)
+    plt.plot(xs, mean_water[:,2], label="Juice 0.2ml", color="blue", linestyle="dotted", linewidth = LINEWIDTH)
     plt.fill_between(xs, mean_water[:,2] - std_water[:,2], mean_water[:,2] + std_water[:,2], color="blue", alpha=0.1)
-    plt.hlines(rs_water[2],xmin=0, xmax=N_runs,color="blue", linestyle="dashed", alpha=0.5)
+    plt.hlines(rs_water[2],xmin=0, xmax=N_runs,color="blue", linestyle="dashed", alpha=0.5, linewidth = LINEWIDTH)
     if use_subjective_value_reward:
         plt.ylabel("Subjective value function",fontsize=28)
     else:
@@ -281,9 +282,9 @@ if __name__ == '__main__':
     N_seeds = 1000
     regression_type = "reward_type_subjective_value"
     
-    plot_simulated_neuron_timecourse(regression_type=regression_type)
+    #plot_simulated_neuron_timecourse(regression_type=regression_type)
     #plot_coefficient_scatter(regression_type=regression_type) 
-    #run_simulation(N_runs = N_runs,N_seeds = N_seeds,double_update=False,regression_type=regression_type)
+    run_simulation(N_runs = N_runs,N_seeds = N_seeds,double_update=False,regression_type=regression_type)
 
 
 

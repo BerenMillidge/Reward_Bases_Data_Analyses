@@ -42,11 +42,13 @@ function plot_average_spikecourse()
     plot(xs, spikes)
 end
 
-function plot_overlapping_window_timecourses(window_size=100, use_frequency_labels = true)
+function plot_overlapping_window_timecourses(window_size=100, use_frequency_labels = true, stim_onset_label = false)
     bucket_start = -500
     bucket_end = 1500
     window_size=window_size
     ws = window_size /2
+    LINEWIDTH  = 2
+    print("STARTING")
     xs = collect(bucket_start:50:bucket_end-100)
     juice_means, juice_stds = count_plot_by_neuron(juice_neuron,bucket_start, bucket_end, window_size,true,true)
     food_means, food_stds = count_plot_by_neuron(food_neuron, bucket_start, bucket_end, window_size,true,true)
@@ -56,12 +58,17 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         juice_means = juice_means ./ window_size_seconds
         food_means = food_means ./ window_size_seconds
     end
-    plot(xs .+ ws,juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
-    plot!(xs .+ ws,juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs .+ ws,juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs .+ ws,juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs .+ ws,juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
-    vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    plot(xs .+ ws,juice_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,juice_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,juice_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,juice_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,juice_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot, linewidth=LINEWIDTH)
+    if stim_onset_label
+        print("Stim onset label $stim_onset_label")
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    else
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="")
+    end
     xlabel!("Time (ms) after cue")
     if use_frequency_labels
         ylabel!("Firing rate within window (Hz)")
@@ -69,14 +76,18 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         ylabel!("Spikes within window")
     end
     title!("Juice responsive neuron")
-    savefig("figures/juice_neuron_all_conditions_overlapping_window_3.png")
+    savefig("figures/juice_neuron_all_conditions_overlapping_window_4.png")
 
-    plot(xs .+ ws,food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
-    plot!(xs .+ ws,food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs .+ ws,food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs .+ws,food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs .+ ws,food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
-    vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    plot(xs .+ ws,food_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,food_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,food_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot, linewidth=LINEWIDTH)
+    plot!(xs .+ws,food_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid, linewidth=LINEWIDTH)
+    plot!(xs .+ ws,food_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot, linewidth=LINEWIDTH)
+    if stim_onset_label
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    else
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="")
+    end
     xlabel!("Time (ms) after cue")
     if use_frequency_labels
         ylabel!("Firing rate within window (Hz)")
@@ -84,14 +95,18 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         ylabel!("Spikes within window")
     end
     title!("Banana responsive neuron")
-    savefig("figures/food_neuron_all_conditions_overlapping_window_plot_3.png")
+    savefig("figures/food_neuron_all_conditions_overlapping_window_plot_4.png")
 
     plot(xs,standard_means[5][1,:], label="0.9ml juice",color=:blue, guidefontsize=GUIDEFONTSIZE, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE)
-    plot!(xs,standard_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot)
-    plot!(xs,standard_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot)
-    plot!(xs,standard_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid)
-    plot!(xs,standard_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot)
-    vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    plot!(xs,standard_means[4][1,:], label="0.5ml juice",color=:blue,linestyle=:dashdot, linewidth=LINEWIDTH)
+    plot!(xs,standard_means[3][1,:], label="0.3ml juice",color=:blue,linestyle=:dot, linewidth=LINEWIDTH)
+    plot!(xs,standard_means[1][1,:], label="1.5g banana",color=:orange,linestyle=:solid, linewidth=LINEWIDTH)
+    plot!(xs,standard_means[2][1,:], label="0.3g banana",color=:orange,linestyle=:dashdot, linewidth=LINEWIDTH)
+    if stim_onset_label
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="Stimulus Onset")
+    else
+        vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label="")
+    end
     xlabel!("Time (ms) after cue")
     if use_frequency_labels
         ylabel!("Firing rate within window (Hz)")
@@ -99,7 +114,8 @@ function plot_overlapping_window_timecourses(window_size=100, use_frequency_labe
         ylabel!("Spikes within window")
     end
     title!("Value responsive neuron")
-    savefig("figures/value_only_neuron_all_conditions_overlapping_window_plot_3.png")
+    println("SAVING FIGS")
+    savefig("figures/value_only_neuron_all_conditions_overlapping_window_plot_4.png")
 end
 
 function timecourse_plots_non_overlapping()
@@ -284,7 +300,7 @@ function relative_spikes_scatterplot_old(plot_firing_rate=false)
     return corr_coeff, p_val
 end
 
-function relative_spikes_scatterplot(normalized_counts = true, use_all_situations = false, use_best_fit_line = true,plot_firing_rate=false,plot_best_fit_line = false)
+function relative_spikes_scatterplot(normalized_counts = true, use_all_situations = false, use_best_fit_line = true,plot_firing_rate=false,plot_best_fit_line = false, use_coeff_colorscheme = true)
     window_start = 100
     window_end = 400
     window_size = window_end - window_start
@@ -310,11 +326,48 @@ function relative_spikes_scatterplot(normalized_counts = true, use_all_situation
     #    more_banana_juice_stds = more_banana_juice_stds / divisor
     #    more_banana_banana_stds = more_banana_banana_stds / divisor
     #end
+    if !use_coeff_colorscheme
+        scatter(more_juice_juice, more_juice_banana,xerr = more_juice_juice_stds ./ sqrt(106), yerr=more_juice_banana_stds ./sqrt(106),m=:circle,lc=:blue, mc=:blue, msc=:blue,alpha=1,label=false, guidefontsize=11, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE, aspect_ratio = :equal)
+        scatter!(more_banana_juice, more_banana_banana,xerr = more_banana_juice_stds ./ sqrt(106), yerr=more_banana_banana_stds ./sqrt(106),m=:circle,lc=:orange, mc=:orange, msc=:orange,alpha=1,label=false)
+        scatter!(more_juice_juice, more_juice_banana,m=:circle,lc=:black, mc=:black, msc=:black,label=false)
+        scatter!(more_banana_juice, more_banana_banana,m=:black,lc=:black, mc=:black, msc=:black,label=false)
+    end
+    if use_coeff_colorscheme
+        # get the required coeflist
+        coeffs = npzread("data/banana_juice_bipolar_coeff_list_normalized.npy")[3,:]
+        coef_idx_banana = []
+        for i in 1:length(coeffs)
+            if coeffs[i] < 0
+                push!(coef_idx_banana , i)
+            end
+        end
+        banana_juice_vals = []
+        banana_juice_stds = []
+        banana_banana_vals = []
+        banana_banana_stds = []
+        other_juice_vals = []
+        other_juice_stds = []
+        other_banana_vals = []
+        other_banana_stds = []
+        for i in 1:length(counts_juice_means)
+            if i in coef_idx_banana
+                push!(banana_juice_vals, counts_juice_means[i])
+                push!(banana_juice_stds, counts_juice_stds[i])
+                push!(banana_banana_vals, counts_banana_means[i])
+                push!(banana_banana_stds, counts_banana_stds[i])
+            else
+                push!(other_juice_vals, counts_juice_means[i])
+                push!(other_juice_stds, counts_juice_stds[i])
+                push!(other_banana_vals, counts_banana_means[i])
+                push!(other_banana_stds, counts_banana_stds[i])
+            end
+        end
+        scatter(banana_juice_vals, banana_banana_vals,xerr = banana_juice_stds ./ sqrt(106), yerr=banana_banana_stds ./sqrt(106),m=:circle,lc=:orange, mc=:orange, msc=:orange,alpha=1,label=false, guidefontsize=11, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE, aspect_ratio = :equal)
+        scatter!(other_juice_vals, other_banana_vals,xerr = other_banana_stds ./sqrt(106), yerr = other_juice_stds ./sqrt(106), m=:circle,lc=:blue, mc=:blue, msc=:blue,label=false)
+        scatter!(banana_juice_vals, banana_banana_vals,m=:circle,lc=:black, mc=:black, msc=:black,label=false)
+        scatter!(other_juice_vals, other_banana_vals,m=:black,lc=:black, mc=:black, msc=:black,label=false)
+    end
 
-    scatter(more_juice_juice, more_juice_banana,xerr = more_juice_juice_stds ./ sqrt(106), yerr=more_juice_banana_stds ./sqrt(106),m=:circle,lc=:blue, mc=:blue, msc=:blue,alpha=1,label=false, guidefontsize=11, tickfontsize=TICKFONTSIZE,legendfontsize=LEGENDFONTSIZE, aspect_ratio = :equal)
-    scatter!(more_banana_juice, more_banana_banana,xerr = more_banana_juice_stds ./ sqrt(106), yerr=more_banana_banana_stds ./sqrt(106),m=:circle,lc=:orange, mc=:orange, msc=:orange,alpha=1,label=false)
-    scatter!(more_juice_juice, more_juice_banana,m=:circle,lc=:black, mc=:black, msc=:black,label=false)
-    scatter!(more_banana_juice, more_banana_banana,m=:black,lc=:black, mc=:black, msc=:black,label=false)
     vline!([0], linestyle=:dash, alpha=0.6, color=:gray,label=false)
     hline!([0], linestyle=:dash, alpha=0.6, color=:gray,label=false)
     if !plot_firing_rate
@@ -343,8 +396,8 @@ function relative_spikes_scatterplot(normalized_counts = true, use_all_situation
         end
     end
     if plot_firing_rate
-        xlabel!("Relative firing rate juice (0.9ml)")
-        ylabel!("Relative firing rate banana (1.5g)")
+        xlabel!("Relative firing rate 0.9ml juice (Hz)")
+        ylabel!("Relative firing rate 1.5g banana (Hz)")
         title!("Juice vs banana firing rates by neuron")
     else
         xlabel!("Relative spikes juice (0.9ml)")
@@ -352,9 +405,9 @@ function relative_spikes_scatterplot(normalized_counts = true, use_all_situation
         title!("Juice spikes vs banana spikes by neurons")
     end
     if use_all_situations
-        savefig("figures/spikes_scatter_100_400_normalized_colored_correlation_no_best_fit_all_situations_3.png")
+        savefig("figures/spikes_scatter_100_400_normalized_colored_correlation_no_best_fit_all_situations_4.png")
     else
-        savefig("figures/spikes_scatter_100_400_normalized_colored_correlation_no_best_fit_3.png")
+        savefig("figures/spikes_scatter_100_400_normalized_colored_correlation_no_best_fit_4.png")
     end
 end
 
@@ -390,21 +443,21 @@ function significance_histogram(use_stored_data = true,use_title = true, place_v
     end
     xs = collect(0:N_significant+1)
     xticks = (xs[1:end-1] .+ 0.5, string.(xs))
-    histogram(slist,xlim=(0,N_significant + 1),bins=xs,xticks=xticks,bar_width=1,label=false, guidefontsize=GUIDEFONTSIZE+1, tickfontsize=11, legendfontsize=LEGENDFONTSIZE+1,titlefontsize=TITLEFONTSIZE)
-    vline!([N_significant + 0.5], linestyle=:dash, alpha=0.9, color=:gray,label=vline_label)
+    histogram(slist,xlim=(0,N_significant + 1),bins=xs,xticks=xticks,bar_width=1,label=false, guidefontsize=GUIDEFONTSIZE+1, tickfontsize=11, legendfontsize=LEGENDFONTSIZE+1,titlefontsize=TITLEFONTSIZE, color=:black, fill=false, fillcolor=:white,edgecolor=:black, linewidth=2)
+    vline!([N_significant + 0.5], linestyle=:dash, alpha=0.9, color=:gray,label=vline_label, linewidth=3)
     plot!(size=(500,500))
     xlabel!("Number of significant coefficients")
     ylabel!("Number of samples")
     if use_title
         title!("Empirical Distribution of Significant Coefficients")
     end
-    savefig("figures/histogram_shuffled_situation_coefficients_4_resized.png")
+    savefig("figures/histogram_shuffled_situation_coefficients_5_resized.png")
 end
 
 
 subjective_value_barchart()
-relative_spikes_scatterplot(true, false, true,true)
-plot_overlapping_window_timecourses(200,true)
+relative_spikes_scatterplot(true, false, true,true, false,true)
+plot_overlapping_window_timecourses(200,true, false)
 #timecourse_plots_non_overlapping()
 all_neurons_condition_histogram(100,400,true,true,true)
 significance_histogram(true, false)
@@ -499,3 +552,14 @@ all_bucket_counts[1]
 
 spikes_filt, events_filt = filter_spikes_events_by_situation(spiketimes,stim_onsets, situations, JUICE_SITUATIONS)
 relative_spikes_filt = get_relative_times(spikes_filt, events_filt)
+
+
+# let's look for the actual coeffs plot
+coeffs = npzread("data/banana_juice_bipolar_coeff_list_normalized.npy")[3,:]
+coef_idx_banana = []
+for i in 1:length(coeffs)
+    if coeffs[i] < 0
+        push!(coef_idx_banana , i)
+    end
+end
+coef_idx_banana

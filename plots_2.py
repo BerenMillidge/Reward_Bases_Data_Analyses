@@ -233,7 +233,7 @@ def plot(df_freq,xvalues,labels,title,dst_dir=None,sname="", nolabel=True):
     plt.yticks(fontsize=12)
     
     # manual legend creation. Fuck rafal. this is so fucking stupid
-    grey_patch = mpatch.Patch(color="gray", label = 'Value')
+    grey_patch = mpatch.Patch(color="gray", label = 'Subjective Value')
     blue_patch = mpatch.Patch(color = 'blue', label='Identity (Juice)')
     orange_patch = mpatch.Patch(color='orange', label='Identity (Banana)')
     
@@ -258,7 +258,7 @@ def plot(df_freq,xvalues,labels,title,dst_dir=None,sname="", nolabel=True):
 
 
     plt.tight_layout()
-    plt.savefig(sname, format="png")
+    plt.savefig("figures/" + str(sname), format="png")
     plt.show()
 
 
