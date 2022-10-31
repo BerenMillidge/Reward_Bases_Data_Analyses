@@ -12,6 +12,9 @@ using NPZ
 using Plots.PlotMeasures
 include("utils.jl")
 
+# try to create figures directory if doesn't exist
+isdir(dir) || mkdir(dir)
+
 ALL_SITUATIONS = [1,2,3,4,5,25]
 neuronlist = [359 360 361 362 363 364 365 366 367 368 369 370 371 372 373 374 375 376 377]
 
@@ -430,11 +433,11 @@ function significance_histogram(use_stored_data = true,use_title = true, place_v
     N_runs = 1000
     N_significant = 13
     if use_stored_data
-        slist = npzread("shuffled_situation_significant_list.npy")
+        slist = npzread("data/shuffled_situation_significant_list.npy")
     else
         significant_list = shuffle_by_situation(neuronlist, N_runs,window_start,window_end)
         slist = Int.(significant_list)
-        npzwrite("shuffled_situation_significant_list.npy", slist)
+        npzwrite("data/shuffled_situation_significant_list.npy", slist)
     end
     if place_vline_label
         vline_label = "Number of significant coefficients"

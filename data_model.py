@@ -4,7 +4,7 @@ from cProfile import run
 import numpy as np
 import matplotlib.pyplot as plt
 from copy import deepcopy
-
+import os
 # so the goal is to just use the new model Rafal proposed. I THINK this should work so I guess we'll find out to be honest
 # we just have to actually experiment with it
 # we can actually just use the original resource values and stuff here
@@ -278,6 +278,8 @@ def plot_simulated_neuron_timecourse(regression_type="reward_type_only", no_xtic
         
         
 if __name__ == '__main__':
+    if not os.path.exists("figures"):
+        os.makedirs("figures")
     N_runs = 50
     N_seeds = 1000
     regression_type = "reward_type_subjective_value"
