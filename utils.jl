@@ -69,9 +69,6 @@ function overlapping_window_count_spikes(spikes, window_size, bucket_start=-500,
     bucket_edge = bucket_start
     println("in overlapping window count spikes $bucket_start")
     bucket_starts = collect(bucket_start:step_size:bucket_end)
-    # I think I see the issue here this is SUMMING across trials right?
-    # not meaning? does this destroy stuff or is this used?
-    # what
     counts = zeros(length(bucket_starts))
     for i in 1:length(spikes)
         stimes = spikes[i]
@@ -101,14 +98,13 @@ end
 
 function get_relative_times(spikes, event_times)
     relative_times = []
-    #println("HELLO")
     for i in 1:length(spikes)
         if typeof(event_times[i]) == Int16
             #println("INDEX: $i")
             push!(relative_times, spikes[i] .- event_times[i])
         else
             e = event_times[i]
-            #println("argh: $e")
+            #println("error: $e")
         end
     end
     return relative_times
@@ -226,7 +222,7 @@ function count_plot_by_neuron(neuronlist, bucket_start, bucket_end, window_size,
     println("In count plot by neuron $use_overlapping_window")
     all_bucket_counts =bucket_count_by_situation_neuronlist(neuronlist,ALL_SITUATIONS,window_size, bucket_start, bucket_end,true, use_overlapping_window)
     if normalize_by_prev_window == true
-        print("not implemented") # yeah I don't think this actually makes sense in this case!
+        print("not implemented") # I don't think this actually makes sense in this case!
     end
     mean_all_counts = []
     std_all_counts = []
@@ -252,9 +248,6 @@ function filter_situations_by_situationlist(situations, valid_situations)
 end
 
 function filter_situation_by_subjective_value(situations)
-    # this one is a bit bullshit since it's read off by eye from an incorrect chart
-    # but that's just the way of it and it'll probably screw up my regression
-    # I'm not sure what I should do to do this properly
     subjective_value_regressor = float.(zeros(length(situations)))
     for i in 1:length(situations)
         sit_val = situations[i][2]
