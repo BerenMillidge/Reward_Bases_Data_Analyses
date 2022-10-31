@@ -1,17 +1,10 @@
-# let's just do an experiment based on the data model
+# code for simulations of toy model task with weighted reward prediction errors
 
 from cProfile import run
 import numpy as np
 import matplotlib.pyplot as plt
 from copy import deepcopy
 import os
-# so the goal is to just use the new model Rafal proposed. I THINK this should work so I guess we'll find out to be honest
-# we just have to actually experiment with it
-# we can actually just use the original resource values and stuff here
-# so we either need to learn food vs value rewards here? 
-# so is there a value for each neuron? there isn't a reward for each neuron
-# is the value for each neuron just a scaled version of the global prediction error
-# but we MUST be assuming a PE for each neuron
 
 #5 = 0.9ml juice subj value 1
 #1 = 1.5kg bananas 0.7
@@ -19,14 +12,6 @@ import os
 # 3 = 0.2ml juice 0.1
 # 2  = 0.3kg bananas 0.05
 
-# fantastic, the basic model works at least, so it's capable of learning the correct things overall
-# now we just need to randomize etc very quickly
-# and then we will all be good and this won't be an issue at all!
-# I can probably rename this fig2.py or somtehing vague to keep people from prying too much into this model
-# man stupid matlab and neuroscience really sucks but julia is great for it and that is probably what matlab is liketo people who understand neuroscience
-# and that won't be me, have made entire time without matlab so who knows
-# right got this done will upload and formalize as necessary but it's no big deal.
-# now for the C matrix learning for the VFs
 
 neuronlist = ["359", "360", "361", "362", "363", "364", "365", "366", "367", "368", "369", "370", "371", "372", "373", "374", "375", "376","377"]
 

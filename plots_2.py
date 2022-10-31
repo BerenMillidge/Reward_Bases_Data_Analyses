@@ -2,15 +2,15 @@ import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-# to do the fucking manual legend WHY WHY WHY FUCKING RAFAL ARGH
 import matplotlib.patches as mpatch
+from copy import deepcopy
+import os
 
 
 
 neuronlist = ["359", "360", "361", "362", "363", "364", "365", "366", "367", "368", "369", "370", "371", "372", "373", "374", "375", "376","377"]
 
 print(len(neuronlist))
-# right let's try to get this stuff in the right format
 def plot_lm_juices():
     coeflist = np.load("data/banana_juice_reward_type_coeff_list.npy")
     pslist = np.load("data/banana_juice_reward_type_ps_list.npy")
@@ -107,24 +107,6 @@ def plot_lm_value_separate_identity():
 
     plot(df_freq=chi2_df,x_var='class',labels="labels",title='Value + Juice1 + Juice2 coefficients',sname="no_cross_gambles_reward_time_value_identity_separate_coefficients_lm_both_monkeys.jpg")
 
-# okay great -- let's look at how to class this
-
-# create a the dataframe
-#chi2_df = pd.DataFrame({'survived':[0,0,0,1,1,1],
-#                        'class':['First','Second','Third','First','Second','Third'],
-#                        'Frequency':[80,97,372,136,87,119],
-#                        'sig':[True,True,True,True,True,True]})
-
-
-# plot results
-# yeah it's really annoying having to mess with this when you don't understand it
-#how to get the colors going the other wau
-def sort_by_value():
-    pass
-
-# let's do all this sorting. super irritating for marginal gain and I don't see anyway to do it but they of course think it's possible
-# because apparently all plotting is possible in matlab LIES!
-from copy import deepcopy
 
 def plot_lm_value_identity(neuronlist):
     coeflist = np.load("data/banana_juice_bipolar_coeff_list_normalized.npy")
@@ -137,7 +119,6 @@ def plot_lm_value_identity(neuronlist):
     first_coeffs.sort()
     first_coeffs = list(reversed(first_coeffs))
     print(list(first_coeffs))
-    # now let's get everything sorted
     
     sorted_coeflist = np.zeros_like(coeflist)
     sorted_pslist = np.zeros_like(pslist)
@@ -201,8 +182,6 @@ def plot_lm_value_identity(neuronlist):
 
     plot(df_freq=chi2_df,xvalues='class',labels="labels",title='Value/Identity coefficients',sname="banana_juice_value_identity_no_label.png")
 
-
-# like this is completely crazy, I have NO IDEA what this is doing at all
 def plot(df_freq,xvalues,labels,title,dst_dir=None,sname="", nolabel=True):
 
     stdres_sig_sorted = df_freq['sig'] #df_freq.sort_values(hue_var)['sig']
@@ -232,7 +211,6 @@ def plot(df_freq,xvalues,labels,title,dst_dir=None,sname="", nolabel=True):
     #plt.legend(loc='upper left', bbox_to_anchor=(1.0, 0.5), ncol=1)
     plt.yticks(fontsize=12)
     
-    # manual legend creation. Fuck rafal. this is so fucking stupid
     grey_patch = mpatch.Patch(color="gray", label = 'Subjective Value')
     blue_patch = mpatch.Patch(color = 'blue', label='Identity (Juice)')
     orange_patch = mpatch.Patch(color='orange', label='Identity (Banana)')
@@ -263,13 +241,8 @@ def plot(df_freq,xvalues,labels,title,dst_dir=None,sname="", nolabel=True):
 
 
 if __name__ == '__main__':
+    if not os.path.exists("figures"):
+        os.makedirs("figures")
     #plot_lm_juices()
     plot_lm_value_identity(neuronlist)
     #plot_lm_value_separate_identity()
-
-# great so this is nice. they almost all respond strongly to identity.
-# now I need to do this shuffling technique arbitrarily to obtain some kind of p value
-#  but it's looking vaguely promising although a massive effect of value, so I have
-# right so let's thinkg about how well it works.
-# how should I actually do this...
-# one thing I can do is plot how many are significant and then randomize

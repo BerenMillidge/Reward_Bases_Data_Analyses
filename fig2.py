@@ -154,7 +154,7 @@ def plot_coefficient_scatter(regression_type = "reward_type_only"):
     plt.yticks(fontsize=26)
     plt.title("Regression coefficients per neuron",fontsize=28)
     plt.savefig("food_juice_scatterplot_" + str(regression_type) + ".png", format="png")
-    plt.gca().set_aspect('equal') # for rafal's fucking aspect ratio requests
+    plt.gca().set_aspect('equal')
     plt.tight_layout()
     plt.show()
             

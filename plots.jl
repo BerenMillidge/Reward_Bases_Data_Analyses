@@ -200,12 +200,6 @@ function all_neurons_condition_histogram(window_start = 100, window_end = 400,re
     else
         divisor = 1
     end
-
-    # right let's be super annoying re rafal and actually try to set up separate histograms
-    # argh he's so irritating. this plot size thing is driving me insane and making me procrastinate massively
-    # which really sucks as I have SO SO SO MUCH TO DO FUCK
-    # really not enjoying this at all UGH. And SO BAD TODAY have done NOTHING since this morning which fuck
-    # fucking rafal
     spiketimes,  bits, situations, fp_times, stim_onsets, solenoid_1s, solenoid_2s, duration = parse_data_dict("Data/w065-0359" *".mat")
     situation_1 = counts_per_trial_window_by_situation(spiketimes, stim_onsets,situations, [1],window_start,window_end,false) / divisor
     situation_2 = counts_per_trial_window_by_situation(spiketimes, stim_onsets, situations, [2], window_start,window_end,false) / divisor
